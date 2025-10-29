@@ -1,4 +1,4 @@
-const baseURL = '/api'; // use your own URL here or environment variable
+const baseURL = import.meta.env.VITE_API_URL;
 
 export const apiInstance = async <T>({
   url,
