@@ -6,7 +6,9 @@ interface SectionData {
   id: string;
   title: string;
   files: File[];
+  subTopics: string[]; 
 }
+
 
 interface CourseStructure {
   course_title: string;
@@ -28,9 +30,11 @@ const SectionsContainer: React.FC = () => {
       id: Date.now().toString(),
       title: 'Новый раздел',
       files: [],
+      subTopics: [], // Инициализируем пустым массивом
     };
     setSections([...sections, newSection]);
   };
+
 
   const removeSection = (id: string) => {
     setSections(sections.filter(section => section.id !== id));
@@ -52,6 +56,15 @@ const SectionsContainer: React.FC = () => {
     );
   };
 
+  const updateSectionSubTopics = (id: string, newSubTopics: string[]) => {
+    setSections(
+      sections.map(section =>
+        section.id === id ? { ...section, subTopics: newSubTopics } : section
+      )
+    );
+  };
+
+
   const handleGenerateCourse = async () => {
     if (sections.length === 0) {
       alert('Добавьте хотя бы один раздел');
@@ -66,12 +79,14 @@ const SectionsContainer: React.FC = () => {
         chapters: sections.map(section => ({
           title: section.title,
           content: '',
-          sub_topics: [],
+          sub_topics: section.subTopics.map(subTopic => ({
+            title: subTopic,
+            content: '',
+          })),
         })),
       };
 
       const formData = new FormData();
-
       formData.append('course_structure', JSON.stringify(courseStructure));
 
       sections.forEach((section, index) => {
@@ -103,6 +118,7 @@ const SectionsContainer: React.FC = () => {
       setIsUploading(false);
     }
   };
+
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
@@ -145,14 +161,16 @@ const SectionsContainer: React.FC = () => {
             id={section.id}
             title={section.title}
             files={section.files}
+            subTopics={section.subTopics}
             onTitleChange={updateSectionTitle}
             onFilesChange={updateSectionFiles}
+            onSubTopicsChange={updateSectionSubTopics}
             showBottomBorder={index < sections.length - 1}
           />
           <button
             onClick={() => removeSection(section.id)}
             className="mt-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg 
-                       font-medium transition-colors duration-200"
+                 font-medium transition-colors duration-200"
           >
             Удалить раздел
           </button>

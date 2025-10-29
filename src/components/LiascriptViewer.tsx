@@ -1,4 +1,4 @@
-import { useCourse } from '@/context/CourseContext';
+import { useCourse } from '../context/CourseContext';
 import { useEffect, useState } from 'react';
 
 export const CourseViewer = () => {
