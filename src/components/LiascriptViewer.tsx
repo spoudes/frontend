@@ -1,14 +1,15 @@
+import { useCourse } from '@/context/CourseContext';
 import { useEffect, useState } from 'react';
 
-export const LiaScriptViewer = () => {
+export const CourseViewer = () => {
   const [liaScriptUrl, setLiaScriptUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
-
+  const { courseResponse } = useCourse();
   useEffect(() => {
     try {
       // URL к вашему API endpoint
-      const apiUrl = `${import.meta.env.VITE_API_URL}/mock-liascript`;
+      const apiUrl = `${import.meta.env.VITE_API_URL}/mock-liascript/${courseResponse?.folder_id}`;
 
       // LiaScript загрузит markdown напрямую с этого URL
       const url = `https://liascript.github.io/course/?${apiUrl}`;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Section from './Section';
-
+import { useCourse } from '../context/CourseContext';
+import { useNavigate } from 'react-router-dom';
 interface SectionData {
   id: string;
   title: string;
@@ -17,10 +18,11 @@ interface CourseStructure {
 }
 
 const SectionsContainer: React.FC = () => {
+  const navigate = useNavigate();
   const [sections, setSections] = useState<SectionData[]>([]);
   const [courseTitle, setCourseTitle] = useState<string>('Новый курс');
   const [isUploading, setIsUploading] = useState<boolean>(false);
-
+  const { setCourseResponse } = useCourse();
   const addSection = () => {
     const newSection: SectionData = {
       id: Date.now().toString(),
@@ -77,9 +79,9 @@ const SectionsContainer: React.FC = () => {
           formData.append(`chapter_${index}_files`, file);
         });
       });
-    
+
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/generate-course`,
+        `${import.meta.env.VITE_API_URL}/upload-files`,
         {
           method: 'POST',
           body: formData,
@@ -91,8 +93,9 @@ const SectionsContainer: React.FC = () => {
       }
 
       const result = await response.json();
+      setCourseResponse(result);
+      navigate('/course');
       console.log('Курс успешно сгенерирован:', result);
-      alert('Курс успешно отправлен на генерацию!');
     } catch (error) {
       console.error('Ошибка при генерации курса:', error);
       alert('Произошла ошибка при отправке курса');
