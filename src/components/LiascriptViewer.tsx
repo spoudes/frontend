@@ -9,7 +9,7 @@ export const CourseViewer = () => {
   useEffect(() => {
     try {
       // URL к вашему API endpoint
-      const apiUrl = `${import.meta.env.VITE_API_URL}/mock-liascript/${courseResponse?.folder_id}`;
+      const apiUrl = `${import.meta.env.VITE_API_URL}/generate-course/${courseResponse?.folder_id}`;
 
       // LiaScript загрузит markdown напрямую с этого URL
       const url = `https://liascript.github.io/course/?${apiUrl}`;
